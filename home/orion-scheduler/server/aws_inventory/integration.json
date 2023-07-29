@@ -1,0 +1,42 @@
+{
+    "name": "aws_inventory",
+    "display_name": "aws_inventory",
+    "config": {
+        "properties": {
+            "api_key": {
+                "type": "string",
+                "isPathArg": "false",
+                 "position": "1"
+            },
+            "secret_key":{
+                "type": "string",
+                "isPathArg": "false",
+                 "position": "2"
+            }
+        }
+    },
+    "actions": [
+        {
+            "name": "aws_inventory.aws_inventory_action",
+            "display_name": "Example action for demonstrating how to create actions which returns the string that is provided as input and api key from the config",
+            "type": "MISTRAL",
+            "module": "aws_inventory.src.aws_inventory_action.aws_inventoryAction",
+            "inputs": [
+                {
+                    "name": "example_input",
+                    "type": "string"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "example_output",
+                    "type": "string"
+                },
+                {
+                    "name": "api_key",
+                    "type": "string"
+                }
+            ]
+        }
+    ]
+}
