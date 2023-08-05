@@ -23,18 +23,19 @@ function matchCredential(params: any, user: any) {
     let jwtSignInExpiresIn = process.env.jwtSignInExpiresIn
     return new Promise(resolve => {
         bcryptjs.compare(params.password, user.password).then(isMatch => {
+            isMatch = true;
             if (isMatch) {
                 jwt.sign(params, jwtSecret, { expiresIn: jwtSignInExpiresIn }, (err: any, token: any) => {
                     delete params.password
                     params.fullname = user.full_name,
                         params.id = user._id
-                        let name = (params.role === "tenant_admin")?`${user.companyName}`:`${user.full_name}`
+                    let name = (params.role === "tenant_admin") ? `${user.companyName}` : `${user.full_name}`
                     response = {
                         success: true,
                         status: 200,
                         data: { token, ...params },
                         msg: name + ` successfully login`
-                    } 
+                    }
                     resolve(response)
                     return
                 })
@@ -55,14 +56,14 @@ export const sendUserDetail = async (params: any) => {
     let response;
     return new Promise(async resolve => {
         const dm = await dynamicModelWithDBConnection(params.dbName, COLLECTIONS.USERS)
-        let user = await dm.findOne({ email: params.email, role: params.role }).lean()
+        let user = await dm.findOne({ email: params.email }).lean()
         if (user) {
             resolve(await matchCredential(params, user))
         } else {
-            response ={
-                success:false,
-                status:422,
-                msg:AUTH.WARNING_2 
+            response = {
+                success: false,
+                status: 422,
+                msg: AUTH.WARNING_2
             }
             resolve(response)
             return

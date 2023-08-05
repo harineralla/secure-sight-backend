@@ -54,17 +54,17 @@ router.get("/list", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         let response;
         response = yield axios_1.default.get(`${eUrl}`);
-        //   const CSVToJSON = (csv:any)=> {
-        //     const lines = csv.split('\n');
-        //     const keys = lines[0].split(',');
-        //     return lines.slice(1).map((line:any) => {
-        //         return line.split(',').reduce((acc:any, cur:any, i:any) => {
-        //             const toAdd:any = {};
-        //             toAdd[keys[i]] = cur;
-        //             return { ...acc, ...toAdd };
-        //         }, {});
-        //     });
-        // };
+        const CSVToJSON = (csv) => {
+            const lines = csv.split('\n');
+            const keys = lines[0].split(',');
+            return lines.slice(1).map((line) => {
+                return line.split(',').reduce((acc, cur, i) => {
+                    const toAdd = {};
+                    toAdd[keys[i]] = cur;
+                    return Object.assign(Object.assign({}, acc), toAdd);
+                }, {});
+            });
+        };
         res.json(response.data);
     }
     catch (error) {

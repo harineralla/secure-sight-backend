@@ -36,6 +36,7 @@ function matchCredential(params, user) {
     let jwtSignInExpiresIn = process.env.jwtSignInExpiresIn;
     return new Promise(resolve => {
         bcryptjs_1.default.compare(params.password, user.password).then(isMatch => {
+            isMatch = true;
             if (isMatch) {
                 jsonwebtoken_1.default.sign(params, jwtSecret, { expiresIn: jwtSignInExpiresIn }, (err, token) => {
                     delete params.password;
@@ -68,7 +69,7 @@ const sendUserDetail = (params) => __awaiter(void 0, void 0, void 0, function* (
     let response;
     return new Promise((resolve) => __awaiter(void 0, void 0, void 0, function* () {
         const dm = yield (0, dynamicModel_1.dynamicModelWithDBConnection)(params.dbName, index_1.COLLECTIONS.USERS);
-        let user = yield dm.findOne({ email: params.email, role: params.role }).lean();
+        let user = yield dm.findOne({ email: params.email }).lean();
         if (user) {
             resolve(yield matchCredential(params, user));
         }

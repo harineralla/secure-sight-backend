@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CompareDate = void 0;
 const CompareDate = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const todaysDate = new Date(); //Today Date
-    const expiryDate = new Date('2022-12-18');
+    const expiryDate = new Date('2024-12-18');
     if (todaysDate > expiryDate) {
         const response = {
             success: false,
