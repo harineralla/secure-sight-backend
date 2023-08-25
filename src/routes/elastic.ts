@@ -39,6 +39,36 @@ router.post("/data/", async (req, res) => {
 
 });
 
+router.post("/data/search", async (req, res) => {
+  try {
+    let response;
+    const test = req.body.test;
+    switch (test) {
+      case "filtering":
+        response = await axios.post(`${esUrl}${req.body.index}/_search?size=10000`, {
+          query: {
+            bool: {
+              filter: {
+                terms: {
+                  accountID: req.body.id,
+                }
+              }
+            }
+          }
+        });
+        break;
+      default:
+        response = await axios.get(`${esUrl}${req.body.index}/_search?size=10000`);
+        break;
+    }
+    res.json(response.data.hits.hits);
+
+  } catch (error) {
+    res.json(error);
+  }
+
+});
+
 router.get("/list", async (req, res) => {
   try {
     let response;
@@ -70,7 +100,8 @@ router.post("/dataSource", async (req, res) => {
   const indicesData = response.data;
   const indicesList: string[] = indicesData.split('\n')
         .filter((line: string) => line.trim())
-        .map((line: string) => line.split(/\s+/)[2]);
+        .map((line: string) => line.split(/\s+/)[2])
+        .filter((index: string) => (!index.startsWith('.') && !index.startsWith('read-me') && !index.startsWith('index')));
   res.json(indicesList);
   } catch (error) {
     res.json(error);
