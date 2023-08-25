@@ -2,8 +2,8 @@ import express, { Request, Response } from 'express'
 import axios from 'axios';
 const router = express.Router();
 //public
-const esUrl = "http://35.171.144.88:9200/";
-const eUrl = "http://35.171.144.88:9200/_cat/indices?v&pretty=true";
+const esUrl = "http://35.222.53.119:9200/";
+const eUrl = "http://35.222.53.119:9200/_cat/indices?v&pretty=true";
 //client techm
 //const esUrl = "http://10.179.25.132:9200/";
 //fifa
@@ -56,6 +56,22 @@ router.get("/list", async (req, res) => {
   };
 
     res.json(response.data);
+  } catch (error) {
+    res.json(error);
+  }
+});
+
+router.post("/dataSource", async (req, res) => {
+  try {
+    let response;
+    response = await axios.get(`${eUrl}`);
+
+  console.log(response.data)
+  const indicesData = response.data;
+  const indicesList: string[] = indicesData.split('\n')
+        .filter((line: string) => line.trim())
+        .map((line: string) => line.split(/\s+/)[2]);
+  res.json(indicesList);
   } catch (error) {
     res.json(error);
   }
