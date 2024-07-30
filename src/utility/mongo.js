@@ -5,7 +5,7 @@ const dynamicSchema = new Schema({}, { versionKey: false, strict: false })
 
 const dynamicModelWithDBConnection = (dbName, collectionName) => {
     let dynamicModels = {}
-    const url = `mongodb://127.0.0.1:27017/${dbName}`
+    const url =`${process.env.mongo_base_url}/${process.env.mongo_db}?authSource=admin&authMechanism=SCRAM-SHA-256`
     let connection = mongoose.createConnection(url, { maxPoolSize: 100 })
     connection.once('open', () => {
         console.log(`Mongodb (${dbName}) called the (${collectionName}) collection!`)
