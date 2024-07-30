@@ -50,7 +50,8 @@ class TenantController {
             const dm = dynamicModelWithDBConnection(OTHER.MASTER_ADMIN_DB, COLLECTIONS.TENANT)
             const user = await dm.findOneAndDelete({ $and: [{ tenantCode: params.tenantCode }, { dbName: params.dbName }] }).lean()
             if (user) {
-                const url = `${process.env.mongo_base_url}/${params.dbName}`
+                // const url = `${process.env.mongo_base_url}/${params.dbName}`
+                const url = `${process.env.mongo_base_url}/${process.env.mongo_db}?authSource=admin&authMechanism=SCRAM-SHA-256`
                 const connection = mongoose.createConnection(url, { maxPoolSize: 10 })
                 connection.once('open', () => {
                     console.log(`Mongodb called (${params.dbName}) database`)

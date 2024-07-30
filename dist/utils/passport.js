@@ -18,7 +18,8 @@ opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.jwtSecret;
 module.exports = (passport) => {
     passport.use(new JwtStrategy(opts, (jwt_payload, done) => __awaiter(void 0, void 0, void 0, function* () {
-        const dm = yield (0, dynamicModel_1.dynamicModelWithDBConnection)("orion", constant_1.COLLECTIONS.USERS);
+        const dm = yield (0, dynamicModel_1.dynamicModelWithDBConnection)("secure-sight", constant_1.COLLECTIONS.USERS);
+        // const dm = await dynamicModelWithDBConnection("orion", COLLECTIONS.USERS)
         const user = yield dm.findOne({ email: jwt_payload.email }, { password: 0 }).lean();
         return user ? done(null, user) : done(null, false);
     })));

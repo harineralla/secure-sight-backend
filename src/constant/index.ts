@@ -21,5 +21,6 @@ export const OTHER = {
     ROLE1: "master_admin",
     ROLE2: "tenant_admin",
     ROLE3: "user",
-    MASTER_ADMIN_DB: "orion"
+    MASTER_ADMIN_DB: "secure-sight"
+    // MASTER_ADMIN_DB: "orion"
 }

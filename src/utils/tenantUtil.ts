@@ -12,7 +12,8 @@ export const updateDbName = (params: TenantProps) => {
 }
 
 export const createDynamicConnection = (obj: any) => {
-    const url: string = `${process.env.mongo_base_url}/${obj.dbName}` || ""
+    // const url: string = `${process.env.mongo_base_url}/${obj.dbName}` || ""
+    const url = `${process.env.mongo_base_url}/${process.env.mongo_db}?authSource=admin&authMechanism=SCRAM-SHA-256`
     return mongoose.createConnection(url)
 }
 

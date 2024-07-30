@@ -36,7 +36,8 @@ app.use('/api', routes)
 /*****************************************************************************/
 
 /************************* Mongo DB *******************************************/
-let CONNECTION_STRING: string = `${process.env.mongo_base_url}/${process.env.mongo_db}` || ""
+// let CONNECTION_STRING: string = `${process.env.mongo_base_url}/${process.env.mongo_db}` || ""
+let CONNECTION_STRING = `${process.env.mongo_base_url}/${process.env.mongo_db}?authSource=admin&authMechanism=SCRAM-SHA-256`|| ""
 mongoose.connect(CONNECTION_STRING)
 mongoose.connection.once('open', () => {
     console.log(`Connection to database has been established successfully ${CONNECTION_STRING}`)

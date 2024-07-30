@@ -16,8 +16,10 @@ const express_1 = __importDefault(require("express"));
 const axios_1 = __importDefault(require("axios"));
 const router = express_1.default.Router();
 //public
-const esUrl = "http://35.171.144.88:9200/";
-const eUrl = "http://35.171.144.88:9200/_cat/indices?v&pretty=true";
+// const esUrl = "http://35.222.53.119:9200/";
+// const eUrl = "http://35.222.53.119:9200/_cat/indices?v&pretty=true";
+const esUrl = "http://localhost:9200/";
+const eUrl = "http://localhost:9200/_cat/indices?v&pretty=true";
 //client techm
 //const esUrl = "http://10.179.25.132:9200/";
 //fifa
@@ -50,6 +52,34 @@ router.post("/data/", (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.json(error);
     }
 }));
+router.post("/data/search", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let response;
+        const test = req.body.test;
+        switch (test) {
+            case "filtering":
+                response = yield axios_1.default.post(`${esUrl}${req.body.index}/_search?size=10000`, {
+                    query: {
+                        bool: {
+                            filter: {
+                                terms: {
+                                    accountID: req.body.id,
+                                }
+                            }
+                        }
+                    }
+                });
+                break;
+            default:
+                response = yield axios_1.default.get(`${esUrl}${req.body.index}/_search?size=10000`);
+                break;
+        }
+        res.json(response.data.hits.hits);
+    }
+    catch (error) {
+        res.json(error);
+    }
+}));
 router.get("/list", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let response;
@@ -66,6 +96,22 @@ router.get("/list", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             });
         };
         res.json(response.data);
+    }
+    catch (error) {
+        res.json(error);
+    }
+}));
+router.post("/dataSource", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let response;
+        response = yield axios_1.default.get(`${eUrl}`);
+        console.log(response.data);
+        const indicesData = response.data;
+        const indicesList = indicesData.split('\n')
+            .filter((line) => line.trim())
+            .map((line) => line.split(/\s+/)[2])
+            .filter((index) => (!index.startsWith('.') && !index.startsWith('read-me') && !index.startsWith('index')));
+        res.json(indicesList);
     }
     catch (error) {
         res.json(error);

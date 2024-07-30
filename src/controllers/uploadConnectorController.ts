@@ -7,7 +7,8 @@ class UploadConnectorController {
 
     async uploadConnector(req: any) {
         const { name, currentChunkIndex, totalChunks, email, dbName, nameWithoutExtension, display_name, category } = req.query
-        const localDirPath = path.resolve(process.env.PWD, `../orion-scheduler/server`)
+        const localDirPath = path.resolve(process.env.PWD, `../secure-sight-scheduler/server`)
+        // const localDirPath = path.resolve(process.env.PWD, `../orion-scheduler/server`)
         const firstChunk = parseInt(currentChunkIndex) === 0
         const lastChunk = parseInt(currentChunkIndex) === parseInt(totalChunks) - 1
         const data = req.body.toString().split(',')[1] || 'dummy content'

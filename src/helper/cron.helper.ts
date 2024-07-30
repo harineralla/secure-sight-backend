@@ -233,7 +233,8 @@ export const connectorTestScheduler = async (response: any, data: any) => {
 	const presentWorkingDir: any = process.env.PWD
 	const serverPath = path.resolve(
 		presentWorkingDir,
-		`../orion-scheduler/server`,
+		`../secure-sight-scheduler/server`,
+		// `../orion-scheduler/server`,
 	)
 
 	console.log('connector scheduler start!!')
@@ -258,9 +259,9 @@ export const connectorTestScheduler = async (response: any, data: any) => {
 
 		Object.keys(config).forEach((keyOfSecretData) => {
 			const { type, position, isPathArg } = config[keyOfSecretData]
-			argsList[position] = isPathArg
-				? `${serverPath}/${connectorBasePath}/${data[keyOfSecretData]}`
-				: data[keyOfSecretData]
+			argsList[position] = isPathArg=='true'
+				? `${serverPath}/${connectorBasePath}/${data[0][keyOfSecretData]}`
+				: data[0][keyOfSecretData]
 		})
 		let schedulingString: string = ''
 
@@ -278,6 +279,7 @@ export const connectorTestScheduler = async (response: any, data: any) => {
 			schedulingString = `0 */23 * * *`
 		}
 		let argsOfConnector = argsList.join(' ').trim()
+		// let command = `python ${serverPath}/${connectorBasePath}/${connectorFileNameWithExtension} ${argsOfConnector} > ${serverPath}/cron.log 2>&1`
 		let command = `python3 ${serverPath}/${connectorBasePath}/${connectorFileNameWithExtension} ${argsOfConnector} > ${serverPath}/cron.log 2>&1`
 		let zipFilePath = path.join(serverPath, connectorBasePath + `.zip`)
 

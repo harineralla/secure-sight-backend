@@ -163,7 +163,9 @@ class cronScheduler {
 }
 const connectorTestScheduler = (response, data) => __awaiter(void 0, void 0, void 0, function* () {
     const presentWorkingDir = process.env.PWD;
-    const serverPath = path.resolve(presentWorkingDir, `../orion-scheduler/server`);
+    const serverPath = path.resolve(presentWorkingDir, 
+    // `../secure-sight-scheduler/server`,
+    `../orion-scheduler/server`);
     console.log('connector scheduler start!!');
     try {
         let { minute, hour, date, day, repeat, connectorId, userId, dbName } = response;
@@ -175,9 +177,9 @@ const connectorTestScheduler = (response, data) => __awaiter(void 0, void 0, voi
         let argsList = [];
         Object.keys(config).forEach((keyOfSecretData) => {
             const { type, position, isPathArg } = config[keyOfSecretData];
-            argsList[position] = isPathArg
-                ? `${serverPath}/${connectorBasePath}/${data[keyOfSecretData]}`
-                : data[keyOfSecretData];
+            argsList[position] = isPathArg == 'true'
+                ? `${serverPath}/${connectorBasePath}/${data[0][keyOfSecretData]}`
+                : data[0][keyOfSecretData];
         });
         let schedulingString = '';
         if (repeat.toLowerCase() == 'hourly') {
@@ -199,7 +201,7 @@ const connectorTestScheduler = (response, data) => __awaiter(void 0, void 0, voi
             schedulingString = `0 */23 * * *`;
         }
         let argsOfConnector = argsList.join(' ').trim();
-        let command = `python3 ${serverPath}/${connectorBasePath}/${connectorFileNameWithExtension} ${argsOfConnector} > ${serverPath}/cron.log 2>&1`;
+        let command = `python ${serverPath}/${connectorBasePath}/${connectorFileNameWithExtension} ${argsOfConnector} > ${serverPath}/cron.log 2>&1`;
         let zipFilePath = path.join(serverPath, connectorBasePath + `.zip`);
         const isFileExists = yield fs_1.default.access(`${serverPath}/${connectorBasePath}/${connectorFileNameWithExtension}`, fs_1.default.constants.F_OK, (err) => {
             console.log('Err', err);

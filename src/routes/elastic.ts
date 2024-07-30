@@ -2,8 +2,10 @@ import express, { Request, Response } from 'express'
 import axios from 'axios';
 const router = express.Router();
 //public
-const esUrl = "http://35.222.53.119:9200/";
-const eUrl = "http://35.222.53.119:9200/_cat/indices?v&pretty=true";
+const esUrl = "http://13.234.237.238:9200/";
+const eUrl = "http://13.234.237.238:9200/_cat/indices?v&pretty=true";
+// const esUrl = "http://localhost:9200/";
+// const eUrl = "http://localhost:9200/_cat/indices?v&pretty=true"
 //client techm
 //const esUrl = "http://10.179.25.132:9200/";
 //fifa
